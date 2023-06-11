@@ -1,0 +1,20 @@
+* {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  outline: none;
+  color: #fff;
+  font-family: sans-serif;
+}
+
+input {
+  color: #000;
+}
+
+button {
+  color: #000;
+}
+
+body {
+  background-color: #222427;
+}
