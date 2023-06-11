@@ -1,6 +1,6 @@
 import app from "./app.js";
 import connectDB from "./db.js";
 
-connectDB();
+connectDB(">>> Database connected");
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log("Server running at :", PORT));
+app.listen(PORT, () => console.log(`>>> Server running at : ${PORT}`.yellow));

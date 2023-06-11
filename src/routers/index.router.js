@@ -1,8 +1,9 @@
 import { Router } from "express";
 import {
-  register,
-  users,
-  deleteController,
+  getUsers,
+  postUsers,
+  patchUsers,
+  deleteUsers,
   indexPage,
 } from "../controllers/index.controller.js";
 
@@ -10,10 +11,12 @@ const indexRouter = Router();
 
 // http requests
 indexRouter.get("/", indexPage);
-indexRouter.get("/users", users);
+indexRouter.get("/users", getUsers);
 
-indexRouter.post("/register", register);
+indexRouter.post("/users", postUsers);
 
-indexRouter.delete("/delete", deleteController);
+indexRouter.patch("/users", patchUsers);
+
+indexRouter.delete("/users", deleteUsers);
 
 export default indexRouter;

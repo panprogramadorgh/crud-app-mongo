@@ -1,6 +1,7 @@
 import express from "express";
 import morgan from "morgan";
 import ejs from "ejs";
+import "colors";
 import indexRouter from "./routers/index.router.js";
 
 const app = express();

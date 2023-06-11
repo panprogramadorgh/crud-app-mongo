@@ -31,11 +31,8 @@ function handleButtonClick() {
     method: "POST",
     headers: {
       "Content-Type": "appliaction/json",
-      Accept: "*/*",
     },
-    body: JSON.stringify({
-      title: "nuevo video mi gente",
-    }),
+    body: JSON.stringify(newUser),
   });
 }
 

@@ -1,38 +1,54 @@
-import mongoose from "mongoose";
 import User from "../models/user.model.js";
 
 export const indexPage = (_, res) => {
   res.status(200).render("index.ejs", null);
 };
 
-export const register = (req, res) => {
-  res.json(req.body);
-  // res.redirect("/#");
-  // const newUser = new User(req.body);
-  // newUser.save();
-  // res.status(200).json(newUser);
-};
-
-export const users = async (req, res) => {
+export const getUsers = async (req, res) => {
+  const { username } = req.body;
   try {
-    const { userName } = req.query;
-    const users = await mongoose.model("User", "users").find();
-    if (!userName) return res.status(200).json(users);
-    const userNameUsers = users.filter((eachUser) => {
-      return eachUser.name === userName;
-    });
-    if (userNameUsers.length > 0) return res.status(200).json(userNameUsers);
-    res.status(200).json("No Users");
+    const users = await User.find(username ? { username } : {});
+    if (users.length > 0) return res.json(users);
+    res.json("No Users");
   } catch (err) {
     res.json(err);
   }
 };
 
-export const deleteController = async (req, res) => {
-  const { userName } = req.query;
+export const postUsers = async (req, res) => {
+  const newUser = new User(req.body);
   try {
-    await mongoose.model("User", "users").deleteMany({ name: userName });
-    res.json("user deleted");
+    await newUser.save();
+    res.status(200).json(newUser);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json(err);
+  }
+};
+
+export const patchUsers = async (req, res) => {
+  // finds, updates and saves the query matching documents
+  const { username, newUsername } = req.body;
+  try {
+    const usersToUpdate = await User.find({ username });
+    usersToUpdate.forEach((eachUser) => {
+      eachUser.username = newUsername;
+      eachUser.save();
+    });
+    res.json(usersToUpdate);
+  } catch (err) {
+    console.error(err);
+    res.json(err);
+  }
+};
+
+export const deleteUsers = async (req, res) => {
+  const { username } = req.body;
+  try {
+    const usersToDelete = await User.find({ username });
+    if (usersToDelete.length < 1) return res.json("Users not found");
+    await User.deleteMany({ username });
+    res.json(usersToDelete);
   } catch (err) {
     console.log(err);
     res.json("an error happens");
