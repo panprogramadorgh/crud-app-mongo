@@ -1,16 +1,20 @@
 import { Router } from "express";
 import {
+  index,
   getUsers,
   postUsers,
   patchUsers,
   deleteUsers,
-  indexPage,
+  register,
+  login,
 } from "../controllers/index.controller.js";
 
 const indexRouter = Router();
 
 // http requests
-indexRouter.get("/", indexPage);
+indexRouter.get("/", index);
+indexRouter.get("/register", register);
+indexRouter.get("/login", login);
 indexRouter.get("/users", getUsers);
 
 indexRouter.post("/users", postUsers);

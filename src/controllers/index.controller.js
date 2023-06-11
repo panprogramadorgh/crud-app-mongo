@@ -1,11 +1,18 @@
 import User from "../models/user.model.js";
 
-export const indexPage = (_, res) => {
-  res.status(200).render("index.ejs", null);
+export const index = (_, res) => {
+  res.redirect("/register");
+};
+
+export const register = (_, res) =>
+  res.status(200).render("register.ejs", null);
+
+export const login = (_, res) => {
+  res.status(200).render("login.ejs", null);
 };
 
 export const getUsers = async (req, res) => {
-  const { username } = req.body;
+  const { username } = req.query;
   try {
     const users = await User.find(username ? { username } : {});
     if (users.length > 0) return res.json(users);
@@ -16,6 +23,9 @@ export const getUsers = async (req, res) => {
 };
 
 export const postUsers = async (req, res) => {
+  const inputsValueArr = Object.values(req.body);
+  if (inputsValueArr.includes(""))
+    return res.status(500).json("Empty fields are note allow");
   const newUser = new User(req.body);
   try {
     await newUser.save();

@@ -1,13 +1,13 @@
 class UserObject {
-  constructor({ name, surname, age }) {
-    this.name = name;
+  constructor({ username, surname, age }) {
+    this.username = username;
     this.surname = surname;
     this.age = age;
   }
 }
 
 const inputs = {
-  name: document.getElementById("name") || null,
+  username: document.getElementById("name") || null,
   surname: document.getElementById("surname") || null,
   age: document.getElementById("age") || null,
   email: document.getElementById("email") || null,
@@ -18,22 +18,26 @@ function getEachInputValue(inputs) {
   const inputsValue = Object.entries(inputs).map(
     ([eachInputName, eachInput]) => {
       if (!eachInput) return [eachInputName, ""];
-      return [eachInputName, eachInput.value];
+      return [eachInputName, eachInput.value.trim()];
     }
   );
   return Object.fromEntries(inputsValue);
 }
 
 function handleButtonClick() {
-  const inputsValue = getEachInputValue(inputs);
-  const newUser = new UserObject(inputsValue);
-  fetch("/register", {
-    method: "POST",
-    headers: {
-      "Content-Type": "appliaction/json",
-    },
-    body: JSON.stringify(newUser),
-  });
+  (async () => {
+    const formData = getEachInputValue(inputs);
+    const newUserFromFormData = new UserObject(formData);
+    const rawResponse = await fetch("/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newUserFromFormData),
+    });
+    const response = await rawResponse.json();
+    window.alert(JSON.stringify(response));
+  })();
 }
 
 const button = document.getElementById("btn");
