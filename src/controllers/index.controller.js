@@ -11,28 +11,29 @@ export const login = (_, res) => {
   res.status(200).render("login.ejs", null);
 };
 
+export const error = (req, res) => {
+  const { error } = req.query;
+  res.render("error.ejs", { error });
+};
+
 export const getUsers = async (req, res) => {
   const { username } = req.query;
   try {
     const users = await User.find(username ? { username } : {});
     if (users.length > 0) return res.json(users);
     res.json("No Users");
-  } catch (err) {
-    res.json(err);
+  } catch (error) {
+    res.status(500).redirect(`/error?error=${error}`);
   }
 };
 
 export const postUsers = async (req, res) => {
-  const inputsValueArr = Object.values(req.body);
-  if (inputsValueArr.includes(""))
-    return res.status(500).json("Empty fields are note allow");
-  const newUser = new User(req.body);
   try {
+    const newUser = new User(req.body);
     await newUser.save();
     res.status(200).json(newUser);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json(err);
+  } catch (error) {
+    res.status(500).redirect(`/error?error=${error}`);
   }
 };
 
@@ -46,9 +47,8 @@ export const patchUsers = async (req, res) => {
       eachUser.save();
     });
     res.json(usersToUpdate);
-  } catch (err) {
-    console.error(err);
-    res.json(err);
+  } catch (error) {
+    res.status(500).redirect(`/error?error=${error}`);
   }
 };
 
@@ -59,8 +59,7 @@ export const deleteUsers = async (req, res) => {
     if (usersToDelete.length < 1) return res.json("Users not found");
     await User.deleteMany({ username });
     res.json(usersToDelete);
-  } catch (err) {
-    console.log(err);
-    res.json("an error happens");
+  } catch (error) {
+    res.status(500).redirect(`/error?error=${error}`);
   }
 };

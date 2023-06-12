@@ -17,6 +17,20 @@ export default new Schema(
       required: true,
       unique: false,
     },
+    access: {
+      type: Object,
+      required: true,
+      email: {
+        type: String,
+        ruquired: true,
+        unique: true,
+      },
+      password: {
+        type: String,
+        ruquired: true,
+        unique: false,
+      },
+    },
   },
   { timestamps: true }
 );

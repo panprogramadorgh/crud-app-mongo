@@ -28,15 +28,13 @@ function handleButtonClick() {
   (async () => {
     const formData = getEachInputValue(inputs);
     const newUserFromFormData = new UserObject(formData);
-    const rawResponse = await fetch("/users", {
+    await fetch("/users", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(newUserFromFormData),
     });
-    const response = await rawResponse.json();
-    window.alert(JSON.stringify(response));
   })();
 }
 
